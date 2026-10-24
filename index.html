@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3efe4">
+  <meta name="description" content="重启职业生涯：一款轻幽默的中文职业模拟游戏。">
+  <title>重启职业生涯｜非典型人才档案</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ui-refresh.css">
+  <script src="game-data.js" defer></script>
+  <script src="game-engine.js" defer></script>
+  <script src="cultivation-data.js" defer></script>
+  <script src="cultivation-engine.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#game-main">跳到主要内容</a>
+
+  <header class="site-header" aria-label="游戏页头">
+    <a class="brand" href="#" data-action="go-home" aria-label="重启职业生涯首页">
+      <span class="brand-mark" aria-hidden="true">职</span>
+      <span><b>重启职业生涯</b><small>CAREER RESTART</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="file-number" aria-label="档案编号">档案编号 CR-2026</span>
+      <button class="text-button" id="open-history-btn" type="button" data-action="open-history" aria-haspopup="dialog">
+        <span aria-hidden="true">◷</span> 历史档案
+      </button>
+    </div>
+  </header>
+
+  <main id="game-main" tabindex="-1">
+    <!-- 首页 / Landing -->
+    <section class="screen screen--landing is-active" id="screen-landing" data-screen="landing" aria-labelledby="landing-title">
+      <div class="landing-grid">
+        <div class="landing-copy">
+          <p class="eyebrow">人力资源宇宙 · 第 0817 号实验</p>
+          <h1 id="landing-title">这一次，<br><em>换条路</em>上班。</h1>
+          <p class="lead">把天赋、野心和一点点运气重新装订。从 22 岁走到 100 岁，过完一生后，也许还能收到一封修仙录取通知。</p>
+          <div class="landing-actions">
+            <button class="button button--primary button--large" id="start-game-btn" type="button" data-action="start-game">建立新档案 <span aria-hidden="true">→</span></button>
+            <button class="button button--ghost" type="button" data-action="open-history">翻阅旧档案</button>
+          </div>
+          <dl class="landing-meta" aria-label="游戏信息">
+            <div><dt>预计用时</dt><dd>10–15 分钟</dd></div>
+            <div><dt>模拟跨度</dt><dd>22–100 岁</dd></div>
+            <div><dt>现实参考</dt><dd>请酌情相信</dd></div>
+          </dl>
+        </div>
+        <div class="cover-sheet" aria-label="职业档案封面装饰">
+          <span class="paper-clip" aria-hidden="true"></span>
+          <p class="cover-kicker">PERSONNEL FILE</p>
+          <div class="portrait-placeholder" aria-hidden="true">
+            <span class="portrait-head"></span><span class="portrait-body"></span>
+          </div>
+          <div class="cover-lines">
+            <span>姓名：未来的你</span><span>入职：现在</span><span>离职：再议</span>
+          </div>
+          <p class="cover-quote">“方向不一定对，工牌一定要正。”</p>
+          <div class="stamp stamp--approved" aria-hidden="true">准予<br>重启</div>
+          <p class="confidential">内部材料 · 请勿摸鱼时外传</p>
+        </div>
+      </div>
+      <div class="ticker" aria-hidden="true"><span>选择天赋</span><i></i><span>分配属性</span><i></i><span>锁定方向</span><i></i><span>接受命运的 KPI</span></div>
+    </section>
+
+    <!-- 共用步骤头 -->
+    <template id="stepper-template">
+      <ol class="stepper" aria-label="建档进度">
+        <li data-step="talent">01 天赋</li><li data-step="stats">02 属性</li><li data-step="direction">03 方向</li><li data-step="play">04 生涯</li>
+      </ol>
+    </template>
+
+    <!-- 天赋选择 -->
+    <section class="screen" id="screen-talents" data-screen="talents" aria-labelledby="talents-title" hidden>
+      <div class="page-head">
+        <div><p class="eyebrow">表 A-01 / 人才初筛</p><h2 id="talents-title">选三项<em>职业天赋</em></h2><p>别人出生自带资源，你可以先自带三个词条。公平，很公平。</p></div>
+        <div class="selection-meter" aria-live="polite"><span>已选择</span><strong id="talent-count" data-count="talents">0</strong><span>/ 3</span></div>
+      </div>
+      <ol class="stepper" aria-label="建档进度"><li class="is-current" aria-current="step">01 天赋</li><li>02 属性</li><li>03 方向</li><li>04 生涯</li></ol>
+      <div class="talent-grid" id="talent-grid" role="group" aria-label="职业天赋，最多选择三项">
+        <button class="talent-card" type="button" data-talent="social" aria-pressed="false"><span class="card-index">01</span><span class="talent-icon" aria-hidden="true">聊</span><strong>社交悍匪</strong><small>人脉 +2</small><p>电梯里遇见老板，也能自然聊到项目预算。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="learner" aria-pressed="false"><span class="card-index">02</span><span class="talent-icon" aria-hidden="true">学</span><strong>学习永动机</strong><small>能力成长 +15%</small><p>教程收藏夹终于不再只是数字资产。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="lucky" aria-pressed="false"><span class="card-index">03</span><span class="talent-icon" aria-hidden="true">运</span><strong>锦鲤体质</strong><small>好运事件 +20%</small><p>总能踩中风口，偶尔也踩中老板的点。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="workhorse" aria-pressed="false"><span class="card-index">04</span><span class="talent-icon" aria-hidden="true">肝</span><strong>钢铁肝脏</strong><small>精力消耗 −15%</small><p>熬夜不是优势，恢复得快才是。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="insight" aria-pressed="false"><span class="card-index">05</span><span class="talent-icon" aria-hidden="true">察</span><strong>读空气专家</strong><small>关键选项预警</small><p>会议室安静三秒，你已读懂全部潜台词。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="money" aria-pressed="false"><span class="card-index">06</span><span class="talent-icon" aria-hidden="true">钱</span><strong>搞钱雷达</strong><small>收入 +12%</small><p>对“商业闭环”四个字有微弱生理反应。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="calm" aria-pressed="false"><span class="card-index">07</span><span class="talent-icon" aria-hidden="true">稳</span><strong>情绪防火墙</strong><small>压力影响 −20%</small><p>已读不回不是冷漠，是稳定的边界感。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="creative" aria-pressed="false"><span class="card-index">08</span><span class="talent-icon" aria-hidden="true">创</span><strong>脑洞常开</strong><small>创意事件收益 +25%</small><p>方案不一定落地，但一定先飞得很高。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="mentor" aria-pressed="false"><span class="card-index">09</span><span class="talent-icon" aria-hidden="true">贵</span><strong>贵人磁场</strong><small>导师概率 +18%</small><p>总有人愿意提点你，至少提点咖啡。</p><span class="check" aria-hidden="true">✓</span></button>
+        <button class="talent-card" type="button" data-talent="resilient" aria-pressed="false"><span class="card-index">10</span><span class="talent-icon" aria-hidden="true">韧</span><strong>打不蔫</strong><small>失败恢复 +30%</small><p>被拒绝之后，先吃饭，再刷新简历。</p><span class="check" aria-hidden="true">✓</span></button>
+      </div>
+      <nav class="screen-nav" aria-label="页面操作"><p id="talent-hint">还需选择 <b data-remaining="talents">3</b> 项</p><div class="screen-nav__actions"><button class="button button--ghost" type="button" data-action="back">← 返回</button><button class="button button--primary" id="talents-next-btn" type="button" data-action="next" disabled>确认天赋 →</button></div></nav>
+    </section>
+
+    <!-- 属性分配 -->
+    <section class="screen" id="screen-stats" data-screen="stats" aria-labelledby="stats-title" hidden>
+      <div class="page-head"><div><p class="eyebrow">表 A-02 / 初始能力核定</p><h2 id="stats-title">分配你的<em>20 点</em></h2><p>成年人的全能，通常只是每项都来不及。</p></div><div class="point-balance"><span>剩余点数</span><strong id="points-left" data-points-left aria-live="polite">20</strong></div></div>
+      <ol class="stepper" aria-label="建档进度"><li class="is-done">01 天赋</li><li class="is-current" aria-current="step">02 属性</li><li>03 方向</li><li>04 生涯</li></ol>
+      <div class="stats-layout">
+        <div class="stat-list" id="stat-allocation">
+          <article class="stat-row" data-stat="skill"><div class="stat-heading"><span class="stat-glyph">能</span><div><h3>专业能力</h3><p>把“我会一点”变成“这事我负责”</p></div></div><div class="stat-controls"><button type="button" data-action="decrease-stat" aria-label="减少专业能力">−</button><output data-stat-value>0</output><button type="button" data-action="increase-stat" aria-label="增加专业能力">＋</button></div><div class="stat-track"><i data-stat-bar></i></div></article>
+          <article class="stat-row" data-stat="network"><div class="stat-heading"><span class="stat-glyph">人</span><div><h3>人脉关系</h3><p>通讯录里有多少人真的会回消息</p></div></div><div class="stat-controls"><button type="button" data-action="decrease-stat" aria-label="减少人脉关系">−</button><output data-stat-value>0</output><button type="button" data-action="increase-stat" aria-label="增加人脉关系">＋</button></div><div class="stat-track"><i data-stat-bar></i></div></article>
+          <article class="stat-row" data-stat="energy"><div class="stat-heading"><span class="stat-glyph">精</span><div><h3>精力体能</h3><p>决定你下班后还能不能拥有灵魂</p></div></div><div class="stat-controls"><button type="button" data-action="decrease-stat" aria-label="减少精力体能">−</button><output data-stat-value>0</output><button type="button" data-action="increase-stat" aria-label="增加精力体能">＋</button></div><div class="stat-track"><i data-stat-bar></i></div></article>
+          <article class="stat-row" data-stat="insight"><div class="stat-heading"><span class="stat-glyph">识</span><div><h3>行业洞察</h3><p>在热搜之前看到趋势，在裁员之前更新简历</p></div></div><div class="stat-controls"><button type="button" data-action="decrease-stat" aria-label="减少行业洞察">−</button><output data-stat-value>0</output><button type="button" data-action="increase-stat" aria-label="增加行业洞察">＋</button></div><div class="stat-track"><i data-stat-bar></i></div></article>
+          <article class="stat-row" data-stat="mindset"><div class="stat-heading"><span class="stat-glyph">心</span><div><h3>心态韧性</h3><p>把周一过成普通的一天，而不是事故</p></div></div><div class="stat-controls"><button type="button" data-action="decrease-stat" aria-label="减少心态韧性">−</button><output data-stat-value>0</output><button type="button" data-action="increase-stat" aria-label="增加心态韧性">＋</button></div><div class="stat-track"><i data-stat-bar></i></div></article>
+        </div>
+        <aside class="allocation-note"><p class="note-label">审阅意见</p><blockquote>“每项最多 10 点。没有标准答案，只有未来用到时的早知道。”</blockquote><button class="shuffle-button" type="button" data-action="randomize-stats">↻ 帮我随缘分配</button><div class="mini-stamp" aria-hidden="true">量力<br>而行</div></aside>
+      </div>
+      <nav class="screen-nav"><p>请用完全部 20 点</p><div class="screen-nav__actions"><button class="button button--ghost" type="button" data-action="back">← 重选天赋</button><button class="button button--primary" id="stats-next-btn" type="button" data-action="next" disabled>核定属性 →</button></div></nav>
+    </section>
+
+    <!-- 方向选择 -->
+    <section class="screen" id="screen-direction" data-screen="direction" aria-labelledby="direction-title" hidden>
+      <div class="page-head"><div><p class="eyebrow">表 A-03 / 职业路径意向</p><h2 id="direction-title">下一站，<em>往哪走</em>？</h2><p>选的是起跑线，不是铁轨。必要时，我们支持体面地变卦。</p></div></div>
+      <ol class="stepper" aria-label="建档进度"><li class="is-done">01 天赋</li><li class="is-done">02 属性</li><li class="is-current" aria-current="step">03 方向</li><li>04 生涯</li></ol>
+      <div class="direction-list" id="direction-list" role="radiogroup" aria-label="职业方向">
+        <button class="direction-card" type="button" role="radio" aria-checked="false" data-direction="expert"><span class="direction-no">路线 01</span><span class="direction-symbol" aria-hidden="true">◎</span><span class="direction-copy"><strong>专业深潜者</strong><small>EXPERT TRACK</small><p>在一个领域扎得足够深，直到别人开会必须等你。</p></span><span class="risk"><b>稳健型</b> 技能收益高</span><span class="radio-mark" aria-hidden="true"></span></button>
+        <button class="direction-card" type="button" role="radio" aria-checked="false" data-direction="manager"><span class="direction-no">路线 02</span><span class="direction-symbol" aria-hidden="true">△</span><span class="direction-copy"><strong>管理进阶者</strong><small>LEADERSHIP TRACK</small><p>从做好一件事，到让一群人愿意一起把事做好。</p></span><span class="risk"><b>平衡型</b> 人脉收益高</span><span class="radio-mark" aria-hidden="true"></span></button>
+        <button class="direction-card" type="button" role="radio" aria-checked="false" data-direction="creator"><span class="direction-no">路线 03</span><span class="direction-symbol" aria-hidden="true">✦</span><span class="direction-copy"><strong>自由创造者</strong><small>CREATOR TRACK</small><p>把作品当名片，把收入曲线当心电图，刺激但活着。</p></span><span class="risk risk--bold"><b>进取型</b> 波动与机会并存</span><span class="radio-mark" aria-hidden="true"></span></button>
+        <button class="direction-card" type="button" role="radio" aria-checked="false" data-direction="entrepreneur"><span class="direction-no">路线 04</span><span class="direction-symbol" aria-hidden="true">↑</span><span class="direction-copy"><strong>创业冒险家</strong><small>VENTURE TRACK</small><p>自己定义问题，也自己为现金流失眠。</p></span><span class="risk risk--bold"><b>高风险</b> 上限与下限都很有想象力</span><span class="radio-mark" aria-hidden="true"></span></button>
+      </div>
+      <nav class="screen-nav"><p id="direction-hint">请选择一条起始路线</p><div class="screen-nav__actions"><button class="button button--ghost" type="button" data-action="back">← 重分属性</button><button class="button button--primary" id="direction-next-btn" type="button" data-action="next" disabled>签字上路 →</button></div></nav>
+    </section>
+
+    <!-- 游玩主界面 -->
+    <section class="screen screen--play" id="screen-play" data-screen="play" aria-labelledby="play-title" hidden>
+      <header class="dashboard-head">
+        <div><p class="eyebrow">在职履历 / 实时更新</p><h2 id="play-title"><span id="career-year">第 1 年</span> · <em id="career-title">初级打工人</em></h2></div>
+        <div class="career-progress"><span>人生进度</span><div class="progress-track" role="progressbar" aria-label="职业与人生进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="career-progress-bar"></i></div><b><span id="current-year">22</span> / 100 岁</b></div>
+      </header>
+      <div class="dashboard-grid">
+        <aside class="profile-rail" aria-label="角色状态">
+          <div class="id-photo"><span aria-hidden="true">职</span><i class="online-dot" title="在职"></i></div>
+          <div class="profile-title"><strong id="profile-role">产品助理</strong><small id="profile-direction">专业深潜路线</small></div>
+          <dl class="live-stats" id="live-stats">
+            <div data-live-stat="skill"><dt>专业</dt><dd><span><i style="width:56%"></i></span><b>56</b></dd></div>
+            <div data-live-stat="network"><dt>人脉</dt><dd><span><i style="width:42%"></i></span><b>42</b></dd></div>
+            <div data-live-stat="energy"><dt>精力</dt><dd><span><i style="width:78%"></i></span><b>78</b></dd></div>
+            <div data-live-stat="insight"><dt>洞察</dt><dd><span><i style="width:34%"></i></span><b>34</b></dd></div>
+            <div data-live-stat="mindset"><dt>心态</dt><dd><span><i style="width:65%"></i></span><b>65</b></dd></div>
+          </dl>
+          <div class="income-box"><span>当前年薪</span><strong>¥ <span id="salary-value">120,000</span></strong><small id="salary-change">较去年 +0%</small></div>
+          <button class="compact-button" type="button" data-action="toggle-profile">查看完整档案</button>
+        </aside>
+
+        <div class="timeline-panel">
+          <div class="section-label"><span>生涯纪事</span><small>CAREER CHRONICLE</small></div>
+          <ol class="career-timeline" id="career-timeline" aria-live="polite">
+            <li class="timeline-item is-past"><time>第 1 年 · 春</time><div><h3>顺利入职一家“扁平化”公司</h3><p>后来你发现，扁平的是组织结构，立体的是汇报关系。</p><span class="event-tag event-tag--good">能力 +4</span></div></li>
+            <li class="timeline-item is-past"><time>第 1 年 · 夏</time><div><h3>第一次独立负责项目</h3><p>项目如期上线。除了需求、排期和最终效果，其他都和最初一样。</p><span class="event-tag event-tag--good">人脉 +3</span><span class="event-tag event-tag--bad">精力 −8</span></div></li>
+            <li class="timeline-item is-current"><time>现在</time><div><h3>部门空出一个组长位置</h3><p>主管问你：“有没有兴趣多承担一点？”空气里飘着机会，也飘着加班餐的味道。</p><span class="event-tag event-tag--choice">关键抉择</span></div></li>
+          </ol>
+        </div>
+
+        <aside class="news-rail" aria-label="职场侧报">
+          <div class="section-label"><span>办公室侧报</span><small>非必要不当真</small></div>
+          <article class="market-card"><span class="news-date">本年风向</span><h3>行业进入温和增长期</h3><p>专家认为机会很多。专家没有说机会具体在哪。</p><div class="trend-up">↗ 景气度 62</div></article>
+          <article class="colleague-card"><span class="avatar" aria-hidden="true">陈</span><div><small>同事动态</small><p>陈工转发了你的方案，并补充：“在此基础上简单优化。”</p></div></article>
+          <blockquote class="office-quote">“收到”不代表收到，<br>可能只代表看到了。</blockquote>
+        </aside>
+      </div>
+      <div class="play-actions">
+        <div class="choice-box" id="choice-panel" aria-labelledby="choice-title" hidden>
+          <div class="choice-head"><span>请作出选择</span><small>关键年份，方向由你决定</small></div>
+          <h3 id="choice-title">要不要主动争取组长的位置？</h3>
+          <div class="choice-options" id="choice-options"></div>
+        </div>
+        <div class="play-action-bar"><p>一次点击，推进一年。风险、机遇和关键选择会随机出现。</p><button class="button button--primary button--large" id="next-year-btn" type="button" data-action="advance-year">开启下一年 →</button></div>
+      </div>
+    </section>
+
+    <!-- 结局报告 -->
+    <section class="screen screen--ending" id="screen-ending" data-screen="ending" aria-labelledby="ending-title" hidden>
+      <div class="report-sheet">
+        <header class="report-header"><div><p>职业生涯阶段性结案报告</p><small>CAREER DOSSIER / FINAL REPORT</small></div><span>档案号 <b id="report-id">CR-0817-10</b></span></header>
+        <div class="report-hero"><div><p class="eyebrow">经综合评定，你成为了</p><h2 id="ending-title">被市场记住的<br><em>六边形专家</em></h2><p id="ending-summary">你没有成为最响亮的那个人，却成了关键时刻大家最先想到的名字。二十余年里，你把经验变成方法，把方法变成了选择权。</p></div><div class="grade-seal" aria-label="综合评级 A"><small>综合评级</small><strong id="ending-grade">A</strong><span>优秀档案</span></div></div>
+        <div class="report-grid">
+          <section class="report-section"><h3><span>01</span> 生涯关键指标</h3><dl class="metric-grid"><div><dt>最终年薪</dt><dd>¥ <b id="final-salary">680,000</b></dd></div><div><dt>最高职位</dt><dd id="final-position">高级专家</dd></div><div><dt>职业声望</dt><dd><b id="final-reputation">87</b> / 100</dd></div><div><dt>幸福指数</dt><dd><b id="final-happiness">76</b> / 100</dd></div></dl></section>
+          <section class="report-section"><h3><span>02</span> 能力雷达</h3><div class="radar-placeholder" id="ending-radar" aria-label="最终五维属性图"><div class="radar-shape"></div><span class="r1">专业 92</span><span class="r2">人脉 70</span><span class="r3">精力 64</span><span class="r4">洞察 86</span><span class="r5">心态 81</span></div></section>
+          <section class="report-section report-section--wide"><h3><span>03</span> 档案评语</h3><div class="review-copy"><p id="ending-review">此人业务扎实，判断稳定，偶尔在群聊里只回复一个“1”。建议未来继续保持好奇心，并认真使用年假。</p><span class="signature">职业宇宙人事处<br><b>电子签章</b></span></div></section>
+        </div>
+        <div class="achievement-strip" id="achievement-list"><span>已解锁成就</span><b>「会议定海神针」</b><b>「年假守护者」</b><b>「需求翻译官」</b></div>
+        <section class="cultivation-transition-card" id="cultivation-transition" data-cultivation-transition aria-labelledby="cultivation-transition-title">
+          <div class="cultivation-transition-age" aria-hidden="true"><strong>100</strong><span>岁</span></div>
+          <div class="cultivation-transition-copy"><p class="eyebrow">退休之后 / 另一份录取通知</p><h3 id="cultivation-transition-title">凡间履历已结，<em>仙途档案待启。</em></h3><p id="cultivation-eligibility-text" data-cultivation-eligibility aria-live="polite">若此生积累达到仙缘门槛，你将在百岁寿宴上收到一封没有落款的入门帖。</p></div>
+          <div class="cultivation-transition-actions"><span class="cultivation-eligibility-badge" id="cultivation-eligibility-badge" data-cultivation-eligible="pending">仙缘核验中</span><button class="button button--cultivation button--large" id="cultivation-enter-btn" type="button" data-cultivation-action="enter" disabled>百岁之后，开始修仙 →</button></div>
+        </section>
+        <footer class="report-footer"><p>本报告仅代表本次宇宙线，不构成真实职业建议。</p><div><button class="button button--ghost" type="button" data-action="share-result">分享档案</button><button class="button button--primary" id="restart-btn" type="button" data-action="restart">再活一次 ↻</button></div></footer>
+      </div>
+    </section>
+
+    <!-- 修仙建档 -->
+    <section class="screen cultivation-screen" id="cultivation-screen-setup" data-cultivation-screen="setup" aria-labelledby="cultivation-setup-title" hidden>
+      <header class="cultivation-page-head">
+        <div><p class="eyebrow">卷 B-01 / 仙籍初录</p><h2 id="cultivation-setup-title">百岁退休，<em>重新入门</em></h2><p>职场经验可以清零，但你对流程和审批的警觉会陪你渡劫。</p></div>
+        <div class="cultivation-age-chip"><span>当前仙龄</span><strong>0</strong><small>重算</small></div>
+      </header>
+      <ol class="cultivation-stepper" aria-label="仙途建档进度"><li class="is-current" data-cultivation-step="talents">01 灵根</li><li data-cultivation-step="stats">02 根骨</li><li data-cultivation-step="path">03 宗门</li><li data-cultivation-step="journey">04 仙途</li></ol>
+
+      <section class="cultivation-setup-block" aria-labelledby="cultivation-talents-title">
+        <div class="cultivation-block-head"><div><span>第一步</span><h3 id="cultivation-talents-title">选择 3 项天赋 / 灵根</h3></div><div class="cultivation-counter" aria-live="polite"><strong id="cultivation-talent-count" data-cultivation-count="talents">0</strong><span>/ 3</span></div></div>
+        <div class="cultivation-talent-grid" id="cultivation-talent-grid" role="group" aria-label="修仙天赋，最多选择三项">
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="heaven-root" aria-pressed="false"><span>天</span><strong>天灵根</strong><small>修为增长 +20%</small><p>单线程修炼，拒绝灵气内耗。</p><i aria-hidden="true">✓</i></button>
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="sword-heart" aria-pressed="false"><span>剑</span><strong>剑心通明</strong><small>战力 +3</small><p>能一剑解决的事，不开第二次会。</p><i aria-hidden="true">✓</i></button>
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="alchemy" aria-pressed="false"><span>丹</span><strong>丹炉直觉</strong><small>机缘 +2 · 寿元 +1</small><p>配方写适量，你真的知道是多少。</p><i aria-hidden="true">✓</i></button>
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="social" aria-pressed="false"><span>缘</span><strong>仙缘广结</strong><small>人缘 +3</small><p>上至掌门，下至灵鹤，都愿意回你消息。</p><i aria-hidden="true">✓</i></button>
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="steady" aria-pressed="false"><span>稳</span><strong>道心稳固</strong><small>渡劫风险 -15%</small><p>雷都劈到门口了，你还在按计划打坐。</p><i aria-hidden="true">✓</i></button>
+          <button type="button" class="cultivation-talent-card" data-cultivation-talent="fortune" aria-pressed="false"><span>福</span><strong>福缘深厚</strong><small>奇遇概率 +18%</small><p>出门踩到的不是坑，是前辈洞府入口。</p><i aria-hidden="true">✓</i></button>
+        </div>
+      </section>
+
+      <section class="cultivation-setup-block" aria-labelledby="cultivation-stats-title">
+        <div class="cultivation-block-head"><div><span>第二步</span><h3 id="cultivation-stats-title">分配 20 点先天根骨</h3></div><div class="cultivation-points"><span>剩余</span><strong id="cultivation-points-left" data-cultivation-points-left>20</strong></div></div>
+        <div class="cultivation-stat-grid" id="cultivation-stat-allocation">
+          <article data-cultivation-stat="spirit"><div><span>灵</span><strong>灵力</strong><small>境界成长与术法根基</small></div><div class="cultivation-stepper-control"><button type="button" data-cultivation-action="decrease-stat" aria-label="减少灵力">−</button><output data-cultivation-stat-value>0</output><button type="button" data-cultivation-action="increase-stat" aria-label="增加灵力">＋</button></div></article>
+          <article data-cultivation-stat="body"><div><span>体</span><strong>体魄</strong><small>抗雷、抗揍、抗闭关久坐</small></div><div class="cultivation-stepper-control"><button type="button" data-cultivation-action="decrease-stat" aria-label="减少体魄">−</button><output data-cultivation-stat-value>0</output><button type="button" data-cultivation-action="increase-stat" aria-label="增加体魄">＋</button></div></article>
+          <article data-cultivation-stat="insight"><div><span>悟</span><strong>悟性</strong><small>参悟功法与突破效率</small></div><div class="cultivation-stepper-control"><button type="button" data-cultivation-action="decrease-stat" aria-label="减少悟性">−</button><output data-cultivation-stat-value>0</output><button type="button" data-cultivation-action="increase-stat" aria-label="增加悟性">＋</button></div></article>
+          <article data-cultivation-stat="fortune"><div><span>运</span><strong>气运</strong><small>奇遇、秘境与捡漏概率</small></div><div class="cultivation-stepper-control"><button type="button" data-cultivation-action="decrease-stat" aria-label="减少气运">−</button><output data-cultivation-stat-value>0</output><button type="button" data-cultivation-action="increase-stat" aria-label="增加气运">＋</button></div></article>
+          <article data-cultivation-stat="heart"><div><span>心</span><strong>道心</strong><small>心魔抵抗与风险承受</small></div><div class="cultivation-stepper-control"><button type="button" data-cultivation-action="decrease-stat" aria-label="减少道心">−</button><output data-cultivation-stat-value>0</output><button type="button" data-cultivation-action="increase-stat" aria-label="增加道心">＋</button></div></article>
+        </div>
+      </section>
+
+      <section class="cultivation-setup-block" aria-labelledby="cultivation-path-title">
+        <div class="cultivation-block-head"><div><span>第三步</span><h3 id="cultivation-path-title">选择宗门与修行道路</h3></div></div>
+        <div class="cultivation-path-grid" id="cultivation-path-list" role="radiogroup" aria-label="修仙道路">
+          <button type="button" data-cultivation-path="sword" role="radio" aria-checked="false"><b>剑</b><span><strong>凌霄剑宗</strong><small>一剑破万法 · 战力成长快</small></span><i></i></button>
+          <button type="button" data-cultivation-path="alchemy" role="radio" aria-checked="false"><b>丹</b><span><strong>青木丹谷</strong><small>炼丹续命 · 资源积累稳</small></span><i></i></button>
+          <button type="button" data-cultivation-path="formation" role="radio" aria-checked="false"><b>阵</b><span><strong>太虚阵门</strong><small>以智破局 · 悟性收益高</small></span><i></i></button>
+          <button type="button" data-cultivation-path="wanderer" role="radio" aria-checked="false"><b>游</b><span><strong>天地散修</strong><small>没有月例 · 奇遇更自由</small></span><i></i></button>
+        </div>
+      </section>
+      <nav class="cultivation-action-dock"><p id="cultivation-setup-hint">选满天赋、用完点数并确定宗门后即可启程。</p><div><button class="button button--ghost" type="button" data-cultivation-action="back-to-career">← 返回凡间档案</button><button class="button button--cultivation" id="cultivation-start-btn" type="button" data-cultivation-action="start" disabled>登记仙籍，开始修行 →</button></div></nav>
+    </section>
+
+    <!-- 修仙历练 -->
+    <section class="screen cultivation-screen cultivation-play" id="cultivation-screen-play" data-cultivation-screen="play" aria-labelledby="cultivation-play-title" hidden>
+      <header class="cultivation-dashboard-head"><div><p class="eyebrow">仙籍在册 / 实时更新</p><h2 id="cultivation-play-title"><span id="cultivation-age">100 岁</span> · <em id="cultivation-realm">炼气一层</em></h2></div><div class="cultivation-lifespan"><span>剩余寿元</span><strong><span id="cultivation-lifespan-value">60</span> 年</strong><div role="progressbar" aria-label="剩余寿元" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60"><i id="cultivation-lifespan-bar"></i></div></div></header>
+      <section class="cultivation-mmorpg-strip" aria-label="仙途角色详情">
+        <article class="cultivation-mmorpg-panel cultivation-office-panel"><header><span>仙盟官职</span><small>ALLIANCE</small></header><div class="cultivation-office-rank"><i aria-hidden="true">令</i><span><strong id="cultivation-alliance-title">外门执事</strong><small id="cultivation-alliance-name">九霄仙盟 · 声望 120</small></span></div></article>
+        <article class="cultivation-mmorpg-panel cultivation-realm-panel"><header><span>境界</span><small>REALM</small></header><div class="cultivation-realm-rank"><span class="cultivation-rank-stars" id="cultivation-realm-stars" aria-label="境界三阶">✦ ✦ ✦</span><strong id="cultivation-realm-detail">炼气三层</strong><small id="cultivation-realm-bonus">灵压 +8 · 寿元 +20</small></div></article>
+        <article class="cultivation-mmorpg-panel cultivation-equipment-panel"><header><span>装备</span><small>EQUIPMENT</small></header><div class="cultivation-equipment-slots" id="cultivation-equipment-list">
+          <button type="button" class="cultivation-item-slot legendary" data-cultivation-equipment="weapon" data-rarity="legendary" aria-label="武器：赤霄灵剑，传说品质"><b>剑</b><span><small>武器</small><strong id="cultivation-weapon">赤霄灵剑</strong></span></button>
+          <button type="button" class="cultivation-item-slot epic" data-cultivation-equipment="armor" data-rarity="epic" aria-label="护甲：流云法袍，史诗品质"><b>袍</b><span><small>护甲</small><strong id="cultivation-armor">流云法袍</strong></span></button>
+          <button type="button" class="cultivation-item-slot rare" data-cultivation-equipment="accessory" data-rarity="rare" aria-label="饰品：温玉灵佩，稀有品质"><b>佩</b><span><small>饰品</small><strong id="cultivation-accessory">温玉灵佩</strong></span></button>
+        </div></article>
+        <article class="cultivation-mmorpg-panel cultivation-partner-panel"><header><span>道侣</span><small>COMPANION · 成年</small></header><div class="cultivation-partner"><div class="cultivation-partner-avatar" aria-hidden="true">月</div><span><strong id="cultivation-partner-name">沈照月</strong><small id="cultivation-partner-bond">成年修士 · 默契 72</small><em id="cultivation-partner-bonus">共同闭关收益 +6%</em></span></div></article>
+        <article class="cultivation-mmorpg-panel cultivation-technique-panel"><header><span>功法</span><small>TECHNIQUES</small></header><ul id="cultivation-technique-list"><li class="legendary" data-cultivation-technique="primordial-sword"><b>天</b><span><strong>太初剑典</strong><small>九重 · 已修三重</small></span></li><li class="epic" data-cultivation-technique="breathing"><b>地</b><span><strong>长春吐纳诀</strong><small>圆满 · 寿元增益</small></span></li><li class="rare" data-cultivation-technique="cloud-step"><b>玄</b><span><strong>踏云步</strong><small>四层 · 身法增益</small></span></li></ul></article>
+      </section>
+      <details class="cultivation-inventory" id="cultivation-inventory"><summary><span>乾坤袋</span><small id="cultivation-inventory-count">6 / 24 格</small></summary><div id="cultivation-inventory-grid" data-cultivation-inventory><button class="rare" type="button" data-cultivation-item="foundation-pill"><b>丹</b><span>筑基丹</span><small>稀有</small></button><button class="epic" type="button" data-cultivation-item="secret-map"><b>图</b><span>残缺秘境图</span><small>史诗</small></button><button type="button" data-cultivation-item="spirit-stone"><b>石</b><span>上品灵石</span><small>× 28</small></button></div></details>
+      <div class="cultivation-dashboard-grid">
+        <aside class="cultivation-profile" aria-label="修士状态"><div class="cultivation-avatar" aria-hidden="true">仙</div><div><strong id="cultivation-sect-name">凌霄剑宗</strong><small id="cultivation-path-name">剑修一脉</small></div><dl id="cultivation-live-stats"><div data-cultivation-live-stat="spirit"><dt>灵力</dt><dd><i></i><b>0</b></dd></div><div data-cultivation-live-stat="body"><dt>体魄</dt><dd><i></i><b>0</b></dd></div><div data-cultivation-live-stat="insight"><dt>悟性</dt><dd><i></i><b>0</b></dd></div><div data-cultivation-live-stat="fortune"><dt>气运</dt><dd><i></i><b>0</b></dd></div><div data-cultivation-live-stat="heart"><dt>道心</dt><dd><i></i><b>0</b></dd></div></dl></aside>
+        <div class="cultivation-chronicle"><div class="cultivation-panel-label"><span>修行纪事</span><small>CULTIVATION CHRONICLE</small></div><ol id="cultivation-timeline" aria-live="polite"><li class="is-current"><time>仙龄 0 年</time><div><h3>你收起工牌，换上道袍</h3><p>袖子很宽，没有口袋，手机暂时无处安放。</p></div></li></ol></div>
+        <aside class="cultivation-risk-panel"><span>下次天劫风险</span><strong id="cultivation-risk-value">12%</strong><div class="cultivation-risk-meter" role="meter" aria-label="天劫风险" aria-valuemin="0" aria-valuemax="100" aria-valuenow="12"><i id="cultivation-risk-bar"></i></div><p id="cultivation-risk-note">当前天象平稳，适合低调积累。</p><dl><div><dt>修为进度</dt><dd id="cultivation-progress-value">0 / 100</dd></div><div><dt>渡劫次数</dt><dd id="cultivation-tribulation-count">0</dd></div></dl></aside>
+      </div>
+      <div class="cultivation-play-actions">
+        <section class="cultivation-decision" id="cultivation-decision-panel" aria-labelledby="cultivation-decision-title" hidden><header><span>仙途抉择</span><small>选择会写入仙籍</small></header><h3 id="cultivation-decision-title">秘境入口突然开启</h3><div id="cultivation-decision-options" data-cultivation-options></div></section>
+        <div class="cultivation-annual-action" id="cultivation-annual-action"><p>闭关一年，可能增长修为，也可能只学会盘腿不麻。</p><button class="button button--cultivation button--large" id="cultivation-next-year-btn" type="button" data-cultivation-action="advance-year">闭关一年 →</button></div>
+      </div>
+    </section>
+
+    <!-- 修仙结案 -->
+    <section class="screen cultivation-screen" id="cultivation-screen-ending" data-cultivation-screen="ending" aria-labelledby="cultivation-ending-title" hidden>
+      <article class="cultivation-dossier">
+        <header><div><p>仙途阶段性结案报告</p><small>IMMORTAL DOSSIER / FINAL RECORD</small></div><span>仙籍号 <b id="cultivation-report-id">XR-0100</b></span></header>
+        <div class="cultivation-ending-hero"><div><p class="eyebrow">经天道综合评定</p><h2 id="cultivation-ending-title">你最终成为<br><em>人间散仙</em></h2><p id="cultivation-ending-summary">你没有飞得最早，却把每一步都走成了自己的道。</p></div><div class="cultivation-realm-seal"><small>最终境界</small><strong id="cultivation-final-realm">金丹</strong><span id="cultivation-ending-grade">上品</span></div></div>
+        <dl class="cultivation-ending-metrics"><div><dt>终年仙龄</dt><dd><b id="cultivation-final-age">168</b> 岁</dd></div><div><dt>所属宗门</dt><dd id="cultivation-final-sect">凌霄剑宗</dd></div><div><dt>渡劫成功</dt><dd><b id="cultivation-final-tribulations">3</b> 次</dd></div><div><dt>道心圆满度</dt><dd><b id="cultivation-final-heart">82</b> / 100</dd></div></dl>
+        <section class="cultivation-ending-review"><span>天道批语</span><p id="cultivation-ending-review">此修士履历完整，心态尚稳，偶尔把闭关叫作深度工作。准予保留仙籍，建议下次雷雨天不要站山顶。</p></section>
+        <footer><p>本档案属于本次仙途，不构成御剑飞行许可。</p><div><button class="button button--ghost" type="button" data-cultivation-action="back-to-career-ending">查看凡间前传</button><button class="button button--cultivation" id="cultivation-restart-btn" type="button" data-cultivation-action="restart">再修一次 ↻</button></div></footer>
+      </article>
+    </section>
+  </main>
+
+  <!-- 历史档案弹窗 -->
+  <dialog class="history-dialog" id="history-dialog" aria-labelledby="history-title">
+    <form method="dialog" class="dialog-shell">
+      <header><div><p class="eyebrow">档案室 / ARCHIVE</p><h2 id="history-title">历史职业档案</h2></div><button class="dialog-close" value="cancel" aria-label="关闭历史档案">×</button></header>
+      <div class="history-list" id="history-list" aria-live="polite">
+        <article class="history-item" data-history-id="sample-01"><time datetime="2026-10-24">2026.10.24</time><div><strong>六边形专家</strong><span>专业深潜者 · 评级 A</span></div><b>¥68万</b><button type="button" data-action="view-history" aria-label="查看六边形专家档案">查看 →</button></article>
+        <div class="history-empty" id="history-empty" hidden><span aria-hidden="true">空</span><h3>档案柜还是空的</h3><p>完成一次职业生涯后，结局会保存在这里。</p></div>
+      </div>
+      <footer><small>记录仅保存在当前浏览器</small><button class="text-button text-button--danger" id="clear-history-btn" type="button" data-action="clear-history">清空档案</button></footer>
+    </form>
+  </dialog>
+
+  <div class="encounter-overlay legendary" id="encounter-overlay" data-rarity="legendary" role="dialog" aria-modal="true" aria-labelledby="encounter-title" aria-describedby="encounter-text" hidden>
+    <div class="encounter-rays" aria-hidden="true"></div><div class="encounter-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <section class="encounter-card"><p class="encounter-kicker" id="encounter-kicker">传说奇遇</p><div class="encounter-emblem" aria-hidden="true"><span>缘</span></div><h2 id="encounter-title">古剑认主</h2><p id="encounter-text">尘封千年的剑匣忽然鸣响。它似乎认出了你，也可能只是太久没见过人。</p><div class="encounter-reward" id="encounter-reward"><span>获得传说奖励</span><strong>赤霄灵剑</strong><small>战力 +12 · 渡劫成功率 +5%</small></div><button class="button button--cultivation button--large" type="button" data-cultivation-action="close-encounter">收入乾坤袋</button></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+  <noscript><p class="noscript">需要启用 JavaScript 才能开始职业重启——现实世界则无法确认是否已经启用。</p></noscript>
+</body>
+</html>
